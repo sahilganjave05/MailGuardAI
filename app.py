@@ -59,7 +59,8 @@ def main():
         Welcome to **MailGuard AI**, a tool that uses **Machine Learning** to classify emails as either **Spam** or **Not Spam**.
     """)
     
-    st.image("https://via.placeholder.com/1000x300?text=MailGuard+AI", use_column_width=True)
+    # Removed the image here
+    # st.image("https://via.placeholder.com/1000x300?text=MailGuard+AI", use_column_width=True)
 
     # Input email content
     st.subheader("🔍 Email Classification")
