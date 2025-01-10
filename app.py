@@ -2,8 +2,8 @@ import streamlit as st
 import pickle
 import streamlit.components.v1 as components
 
-# Set the page configuration (this must be the first Streamlit command)
-st.set_page_config(page_title="MailGuard AI", page_icon="📬", layout="centered")
+# Set the page configuration
+st.set_page_config(page_title="MailGuard AI", page_icon="📬", layout="wide", initial_sidebar_state="expanded")
 
 # Load the model and vectorizer
 try:
@@ -18,26 +18,55 @@ meta_tags = """
 <meta property="og:description" content="Classify your emails as Spam or Not Spam using AI. Protect your inbox from unwanted emails." />
 <meta property="og:url" content="https://mailguard.streamlit.app/" />
 """
-
-# Inject the meta tags into the HTML of your Streamlit app
 components.html(meta_tags, height=0)
 
-# Main function for the Streamlit app
+# Custom CSS for styling
+st.markdown("""
+    <style>
+    .stButton>button {
+        background-color: #4CAF50;
+        color: white;
+        font-size: 16px;
+        border-radius: 5px;
+        padding: 10px 20px;
+    }
+    .stButton>button:hover {
+        background-color: #45a049;
+    }
+    .result-box {
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Sidebar
+st.sidebar.header("About MailGuard AI")
+st.sidebar.markdown("""
+MailGuard AI is a powerful machine learning application designed to help you:
+- **Identify Spam Emails**.
+- **Filter out unwanted content**.
+- **Protect your inbox** from phishing and junk emails.
+""")
+st.sidebar.info("🔒 **Privacy**: Your data is not stored or shared.")
+
+# Main function
 def main():
-    # Set up the page title and description
-    st.title("📧 Email Spam Classification Application")
+    st.title("📧 MailGuard AI - Spam Email Classifier")
     st.markdown("""
-        This **Machine Learning** application classifies emails as:
-        - **Spam**: Unwanted or junk email
-        - **Ham**: Legitimate or useful email
+        Welcome to **MailGuard AI**, a tool that uses **Machine Learning** to classify emails as either **Spam** or **Not Spam**.
     """)
     
-    # Input text area for email content
-    st.subheader("Email Classification")
-    user_input = st.text_area("Enter the email content to classify:", height=150)
-    
-    # Process and classify the input on button click
-    if st.button("Classify"):
+    st.image("https://via.placeholder.com/1000x300?text=MailGuard+AI", use_column_width=True)
+
+    # Input email content
+    st.subheader("🔍 Email Classification")
+    user_input = st.text_area("✏️ Enter the email content below:", height=200)
+
+    # Classification result
+    if st.button("🚀 Classify Email"):
         if user_input.strip():
             try:
                 # Prepare input for model
@@ -49,19 +78,22 @@ def main():
                 confidence = model.predict_proba(vec).max() * 100
                 
                 # Display results
-                st.write(f"### Input Email:\n\n{user_input}")
+                st.markdown("### 📤 Email Content:")
+                st.write(f"```\n{user_input}\n```")
+                
+                st.markdown("### 📊 Classification Result:")
                 if result[0] == 0:
-                    st.success(f"✅ This is Not a Spam Email ({confidence:.2f}% confidence).")
+                    st.success(f"✅ This is a **Not Spam** email ({confidence:.2f}% confidence).")
                 else:
-                    st.error(f"🚫 This is a Spam Email ({confidence:.2f}% confidence).")
+                    st.error(f"🚫 This is a **Spam** email ({confidence:.2f}% confidence).")
             except Exception as e:
                 st.error(f"An error occurred: {e}")
         else:
-            st.warning("Please enter email content to classify.")
-    
-    # Footer section
+            st.warning("⚠️ Please enter some email content to classify.")
+
+    # Footer
     st.markdown("---")
-    st.markdown("Developed with ❤️ using Streamlit")
+    st.markdown("Developed with ❤️ using **Streamlit**")
 
 # Run the main function
 if __name__ == "__main__":
